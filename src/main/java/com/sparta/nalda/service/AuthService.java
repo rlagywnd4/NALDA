@@ -16,6 +16,10 @@ public class AuthService {
 
     public void signup(String email, String password, String address, UserRole userRole) {
 
+        if(userRepository.existsByEmail(email)){
+           throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
+
         String hashPassword = passwordEncoder.encode(password);
         UserEntity user = new UserEntity(email, hashPassword, address, userRole);
         userRepository.save(user);
