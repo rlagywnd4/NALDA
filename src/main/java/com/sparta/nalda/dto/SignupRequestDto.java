@@ -1,6 +1,6 @@
 package com.sparta.nalda.dto;
 
-import com.sparta.nalda.common.UserRole;
+import com.sparta.nalda.enums.UserRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

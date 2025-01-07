@@ -1,6 +1,6 @@
 package com.sparta.nalda.entity;
 
-import com.sparta.nalda.common.UserRole;
+import com.sparta.nalda.enums.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

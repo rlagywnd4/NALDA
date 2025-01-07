@@ -1,4 +1,4 @@
-package com.sparta.nalda.common;
+package com.sparta.nalda.enums;
 
 public enum UserRole {
     CUSTOMER, OWNER

@@ -1,6 +1,6 @@
 package com.sparta.nalda.service;
 
-import com.sparta.nalda.common.UserRole;
+import com.sparta.nalda.enums.UserRole;
 import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
