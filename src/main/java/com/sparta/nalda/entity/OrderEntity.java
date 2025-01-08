@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "order")
+@Table(name = "menu_orders")
 public class OrderEntity {
 
     @Id

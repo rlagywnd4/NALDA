@@ -1,9 +1,10 @@
 package com.sparta.nalda.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "review")
+@Table(name = "reviews")
 public class ReviewEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +13,8 @@ public class ReviewEntity extends BaseEntity {
     @Column(length = 50)
     private String reviewContents;
 
-    @Column(length = 5)
+    @Column
+    @Size(min = 1, max = 5)
     private Integer starScore;
 
     @OneToOne

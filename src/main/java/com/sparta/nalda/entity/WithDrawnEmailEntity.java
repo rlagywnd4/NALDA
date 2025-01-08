@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "with_drawn_email")
+@Table(name = "with_drawn_emails")
 public class WithDrawnEmailEntity extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
