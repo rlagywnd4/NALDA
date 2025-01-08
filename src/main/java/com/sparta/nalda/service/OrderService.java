@@ -15,14 +15,17 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+
+  private final UesrRepository userRepository;
   private final OrderRepository orderRepository;
+  private final MenuRepository menuRepository;
 
   @Transactional
-  public OrderEntity createOrder(OrderRequestDto requestDto) {
+  public OrderEntity createOrder(Long userId, Long menuId) {
     // 사용자와 메뉴를 DB에서 조회
-    UserEntity user = userRepository.findById(requestDto.getUserId())
+    UserEntity user = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-    MenuEntity menu = menuRepository.findById(requestDto.getMenuId())
+    MenuEntity menu = menuRepository.findById(menuId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
 
     // 주문 엔티티 생성
@@ -32,22 +35,14 @@ public class OrderService {
     return orderRepository.save(order);
   }
 
-  public OrderResponseDto findById(Long id) {
+  public OrderEntity findById(Long id) {
 
 
     // 주문 조회
     OrderEntity findOrder = orderRepository.findByIdOrElseThrow(id);
 
-    StoreEntity store = findOrder.getMenuId().getStoreId();
-    MenuEntity menu = findOrder.getMenuId();
-
-    //상태,유저,메뉴,가게이름,가격
-    return new OrderResponseDto(
-        findOrder.getOrderStatus(),
-        findOrder.getUserId(),
-        findOrder.getMenuId(),
-        store.getStoreName(),
-        menu.getPrice());
+    return orderRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
   }
 
 }

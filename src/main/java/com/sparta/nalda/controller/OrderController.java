@@ -2,9 +2,10 @@ package com.sparta.nalda.controller;
 
 import com.sparta.nalda.dto.OrderRequestDto;
 import com.sparta.nalda.dto.OrderResponseDto;
+import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.OrderEntity;
+import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.service.OrderService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,22 +24,39 @@ public class OrderController {
   private final OrderService orderService;
 
   @PostMapping
-  public ResponseEntity<OrderEntity> createOrder(@RequestBody OrderRequestDto dto) {
-    OrderEntity createdOrder = orderService.createOrder(dto);
-    return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
+  public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderRequestDto dto) {
+    OrderEntity order = orderService.createOrder(dto.getUserId(), dto.getMenuId());
+
+    OrderResponseDto responseDto = new OrderResponseDto(
+        order.getOrderStatus(),
+        order.getUser(),
+        order.getMenu(),
+        order.getMenu().getStoreId().getStoreName(),
+        order.getMenu().getPrice()
+    );
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+
   }
 
   @GetMapping("/orders/{id}")
   public ResponseEntity<OrderResponseDto> findById(@PathVariable Long id) {
-    try {
-      OrderResponseDto orderResponseDto = orderService.findById(id);
+    // 서비스 계층 호출
+    OrderEntity order = orderService.findById(id);
 
-      return new ResponseEntity<>(orderResponseDto, HttpStatus.OK);
-    } catch (EntityNotFoundException e) {
-      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    // 컨트롤러에서 DTO 생성
+    StoreEntity store = order.getMenu().getStoreId();
+    MenuEntity menu = order.getMenu();
+    OrderResponseDto responseDto = new OrderResponseDto(
+        order.getOrderStatus(),
+        order.getUser(),
+        order.getMenu(),
+        store.getStoreName(),
+        menu.getPrice()
+    );
+
+    return ResponseEntity.status(HttpStatus.OK).body(responseDto);
   }
-
 }
+
+

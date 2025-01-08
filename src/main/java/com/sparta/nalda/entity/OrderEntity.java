@@ -21,16 +21,16 @@ public class OrderEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity userId;
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "menu_id")
-    private MenuEntity menuId;
+    private MenuEntity menu;
 
     public OrderEntity(OrderStatus orderStatus, UserEntity user, MenuEntity menu) {
         this.orderStatus = orderStatus;
-        this.userId = user;
-        this.menuId = menu;
+        this.user = user;
+        this.menu = menu;
     }
 
     public void updateStatus(OrderStatus orderStatus) {
