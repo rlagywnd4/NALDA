@@ -1,5 +1,5 @@
 package com.sparta.nalda.util;
 
-public enum userRole {
+public enum UserRole {
     COSTUMER, OWNER
 }
