@@ -22,7 +22,13 @@ public class OwnerMenuController {
      */
     @PostMapping
     public ResponseEntity<MessageResponse> menuSave (@Valid @RequestBody CreateMenuRequestDto dto) {
-        menuService.menuSave(dto);
+        menuService.menuSave(
+                dto.getUserId(),
+                dto.getStoreId(),
+                dto.getMenuName(),
+                dto.getMenuContents(),
+                dto.getPrice()
+        );
         return ResponseEntity.ok(new MessageResponse("메뉴가 생성되었습니다."));
     }
 }
