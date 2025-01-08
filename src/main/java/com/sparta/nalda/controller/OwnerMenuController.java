@@ -2,9 +2,11 @@ package com.sparta.nalda.controller;
 
 import com.sparta.nalda.common.MessageResponse;
 import com.sparta.nalda.dto.menu.CreateMenuRequestDto;
+import com.sparta.nalda.dto.menu.MenuResponseDto;
 import com.sparta.nalda.service.menu.MenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +32,15 @@ public class OwnerMenuController {
                 dto.getPrice()
         );
         return ResponseEntity.ok(new MessageResponse("메뉴가 생성되었습니다."));
+    }
+
+    /**
+     * 메뉴 단건 조회
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<MenuResponseDto> findById(@PathVariable Long id) {
+        return new ResponseEntity<>(menuService.findById(id), HttpStatus.OK);
     }
 }
