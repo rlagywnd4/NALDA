@@ -1,16 +1,16 @@
 package com.sparta.nalda.service;
 
 import com.sparta.nalda.dto.OrderRequestDto;
+import com.sparta.nalda.dto.OrderResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.OrderEntity;
+import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.repository.OrderRepository;
 import com.sparta.nalda.util.OrderStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +30,24 @@ public class OrderService {
 
     // 주문 저장
     return orderRepository.save(order);
+  }
+
+  public OrderResponseDto findById(Long id) {
+
+
+    // 주문 조회
+    OrderEntity findOrder = orderRepository.findByIdOrElseThrow(id);
+
+    StoreEntity store = findOrder.getMenuId().getStoreId();
+    MenuEntity menu = findOrder.getMenuId();
+
+    //상태,유저,메뉴,가게이름,가격
+    return new OrderResponseDto(
+        findOrder.getOrderStatus(),
+        findOrder.getUserId(),
+        findOrder.getMenuId(),
+        store.getStoreName(),
+        menu.getPrice());
   }
 
 }
