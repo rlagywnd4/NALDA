@@ -109,7 +109,7 @@ public class MenuServiceImpl implements MenuService {
         menuRepository.save(menu);
     }
 
-    public void validateUserAndStore(Long userId, Long storeId) {
+    void validateUserAndStore(Long userId, Long storeId) {
         // 유저 확인
         UserEntity user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("유저를 찾을 수 없습니다.")

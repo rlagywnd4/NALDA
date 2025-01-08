@@ -1,6 +1,5 @@
 package com.sparta.nalda.dto.menu;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
