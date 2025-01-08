@@ -1,13 +1,16 @@
 package com.sparta.nalda.dto.menu;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class UpdateMenuRequestDto {
 
-    private Long userId;
-    private Long storeId;
-    private String menuName;
-    private String menuContents;
-    private Long price;
+    private final Long userId;
+    private final Long storeId;
+    private final String menuName;
+    private final String menuContents;
+    private final Long price;
 }

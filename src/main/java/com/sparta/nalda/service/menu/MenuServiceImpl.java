@@ -85,18 +85,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public void updateMenu(Long id, Long userId, Long storeId, String menuName, String menuContents, Long price) {
 
-        // 유저 확인
-        UserEntity user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
-
-        // 가게 확인
-        StoreEntity store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다."));
-
-        // 메뉴 수정 유저 권한 확인
-        if (!store.getUser().equals(user)) {
-            throw new IllegalArgumentException("메뉴 작성자만 수정 할 수 있습니다.");
-        }
+        validateUserAndStore(userId, storeId);
 
         // 메뉴 확인
         MenuEntity menu = menuRepository.findById(id).orElseThrow(
@@ -118,5 +107,22 @@ public class MenuServiceImpl implements MenuService {
         }
 
         menuRepository.save(menu);
+    }
+
+    public void validateUserAndStore(Long userId, Long storeId) {
+        // 유저 확인
+        UserEntity user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("유저를 찾을 수 없습니다.")
+        );
+
+        // 가게 확인
+        StoreEntity store = storeRepository.findById(storeId).orElseThrow(
+                () -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다.")
+        );
+
+        // 메뉴 수정 유저 권한 확인
+        if (!store.getUser().equals(user)) {
+            throw new IllegalArgumentException("메뉴 작성자만 수정 할 수 있습니다.");
+        }
     }
 }

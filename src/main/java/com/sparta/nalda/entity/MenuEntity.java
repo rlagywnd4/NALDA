@@ -27,10 +27,10 @@ public class MenuEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
-    private StoreEntity storeId;
+    private StoreEntity store;
 
-    public MenuEntity(StoreEntity storeId, String menuName, String menuContents, Long price) {
-        this.storeId = storeId;
+    public MenuEntity(StoreEntity store, String menuName, String menuContents, Long price) {
+        this.store = store;
         this.menuName = menuName;
         this.menuContents = menuContents;
         this.price = price;
