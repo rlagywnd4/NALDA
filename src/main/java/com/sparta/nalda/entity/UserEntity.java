@@ -1,29 +1,34 @@
 package com.sparta.nalda.entity;
 
-import com.sparta.nalda.common.userRole;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import com.sparta.nalda.util.userRole;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class UserEntity {
+@Table(name = "user")
+public class UserEntity extends BaseEntity {
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(length = 50)
     private String email;
+
+    @Column(length = 255)
     private String password;
+
+    @Column(length = 255)
     private String address;
 
+    @Column(length = 10)
     @Enumerated(EnumType.STRING)
     private userRole userRole;
 
     public UserEntity(String email, String password, String address,
-        com.sparta.nalda.common.userRole userRole) {
+        com.sparta.nalda.util.userRole userRole) {
         this.email = email;
         this.password = password;
         this.address = address;
