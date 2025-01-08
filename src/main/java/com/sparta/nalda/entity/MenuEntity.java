@@ -13,12 +13,15 @@ public class MenuEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(nullable = false, length = 20)
     private String menuName;
 
+    @Setter
     @Column(length = 50)
     private String menuContents;
 
+    @Setter
     @Column(nullable = false)
     private Long price;
 
