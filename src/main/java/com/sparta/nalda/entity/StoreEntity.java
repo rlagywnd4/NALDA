@@ -10,7 +10,7 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "store")
+@Table(name = "stores")
 public class StoreEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

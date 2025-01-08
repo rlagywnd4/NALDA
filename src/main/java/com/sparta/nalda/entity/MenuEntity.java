@@ -3,7 +3,7 @@ package com.sparta.nalda.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "menu")
+@Table(name = "menus")
 public class MenuEntity extends BaseEntity {
 
     @Id
