@@ -24,4 +24,14 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private MenuEntity menu;
+
+    public OrderEntity(OrderStatus orderStatus, UserEntity user, MenuEntity menu) {
+        this.orderStatus = orderStatus;
+        this.user = user;
+        this.menu = menu;
+    }
+
+    public void updateStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }
