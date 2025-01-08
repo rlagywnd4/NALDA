@@ -23,25 +23,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * AuthenticationManager Bean 등록
-     */
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
-
-    /**
-     * 개발단계 : 모든 경로 인증없이 접근 가능하도록 임시로 설정
-     * CSRF 보호 기능 OFF
-     * 세션을 생성하지 않도록 설정
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf((csrf) -> csrf.disable())
-            .authorizeHttpRequests((authorize) ->
-            authorize.requestMatchers("/**").permitAll()
+            .formLogin((auth) -> auth.disable())
+            .httpBasic((httpBasic) -> httpBasic.disable())
+            .authorizeHttpRequests((auth) ->
+            auth.requestMatchers("/login", "/signup").permitAll()
+                .requestMatchers("/owners").hasRole("OWNER")
+                .anyRequest().authenticated()
         )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
