@@ -1,4 +1,4 @@
-package com.sparta.nalda.dto;
+package com.sparta.nalda.dto.user;
 
 import com.sparta.nalda.util.UserRole;
 import jakarta.validation.constraints.NotBlank;

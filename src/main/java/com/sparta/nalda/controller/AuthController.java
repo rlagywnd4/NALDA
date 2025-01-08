@@ -1,7 +1,7 @@
 package com.sparta.nalda.controller;
 
 import com.sparta.nalda.common.MessageResponse;
-import com.sparta.nalda.dto.SignupRequestDto;
+import com.sparta.nalda.dto.user.SignupRequestDto;
 import com.sparta.nalda.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
