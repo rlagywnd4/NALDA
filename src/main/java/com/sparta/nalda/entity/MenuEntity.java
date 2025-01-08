@@ -13,21 +13,24 @@ public class MenuEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(nullable = false, length = 20)
     private String menuName;
 
+    @Setter
     @Column(length = 50)
     private String menuContents;
 
+    @Setter
     @Column(nullable = false)
     private Long price;
 
     @ManyToOne
     @JoinColumn(name = "store_id")
-    private StoreEntity storeId;
+    private StoreEntity store;
 
-    public MenuEntity(StoreEntity storeId, String menuName, String menuContents, Long price) {
-        this.storeId = storeId;
+    public MenuEntity(StoreEntity store, String menuName, String menuContents, Long price) {
+        this.store = store;
         this.menuName = menuName;
         this.menuContents = menuContents;
         this.price = price;
