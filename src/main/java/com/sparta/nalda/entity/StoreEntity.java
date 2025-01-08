@@ -1,7 +1,10 @@
 package com.sparta.nalda.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.nalda.util.StoreStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +13,8 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "stores")
 public class StoreEntity extends BaseEntity {
     @Id
@@ -23,7 +28,9 @@ public class StoreEntity extends BaseEntity {
 
     private Long minOrderPrice;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime openTime;
+    @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime closeTime;
 
     @Column(length = 10)
