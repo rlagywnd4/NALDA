@@ -20,12 +20,12 @@ public class MenuEntity extends BaseEntity {
     @Column(nullable = false)
     private Long price;
 
-    @Setter
     @ManyToOne
     @JoinColumn(name = "store_id")
     private StoreEntity storeId;
 
-    public MenuEntity(String menuName, String menuContents, Long price) {
+    public MenuEntity(StoreEntity storeId, String menuName, String menuContents, Long price) {
+        this.storeId = storeId;
         this.menuName = menuName;
         this.menuContents = menuContents;
         this.price = price;

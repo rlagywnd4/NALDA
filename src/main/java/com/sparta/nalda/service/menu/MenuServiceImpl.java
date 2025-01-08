@@ -24,15 +24,12 @@ public class MenuServiceImpl implements MenuService {
     private final UserRepository userRepository;
 
 
-    /**
-     * 메뉴 생성
-     * @param dto
-     */
+
     @Override
-    public void menuSave(CreateMenuRequestDto dto) {
+    public void menuSave(Long userId, Long storeId, String menuName, String menuContents, Long price) {
 
         // 유저 확인
-        UserEntity user = userRepository.findById(dto.getUserId()).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
         // 메뉴 생성 유저 권한 확인
         if (!UserRole.OWNER.equals(user.getUserRole())) {
@@ -40,15 +37,14 @@ public class MenuServiceImpl implements MenuService {
         }
 
         // 가게 확인
-        StoreEntity store = storeRepository.findById(dto.getStoreId()).orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다."));
+        StoreEntity store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다."));
 
         // 가게가 폐업했을 때
         if (!StoreStatus.ENABLE.equals(store.getStatus())) {
             throw new IllegalArgumentException("폐업한 가게에는 메뉴를 추가할 수 없습니다.");
         }
 
-        MenuEntity menu = new MenuEntity(dto.getMenuName(), dto.getMenuContents(), dto.getPrice());
-        menu.setStoreId(store);
+        MenuEntity menu = new MenuEntity(store, menuName, menuContents, price);
 
         menuRepository.save(menu);
     }
