@@ -11,7 +11,9 @@ import com.sparta.nalda.util.StoreStatus;
 import com.sparta.nalda.util.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -71,5 +73,48 @@ public class StoreServiceImpl implements StoreService {
         List<MenuEntity> menus = menuRepository.findAllByStoreId(storeId);
 
         return new StoreAndMenusResponseDto(store, menus);
+    }
+
+
+    /**
+     * 가게 수정
+     * @param id
+     * @param storeName
+     * @param storeContents
+     * @param minOrderPrice
+     * @param openTime
+     * @param closeTime
+     */
+    @Override
+    @Transactional
+    public void updateStore(Long id, String storeName, String storeContents, Long minOrderPrice, LocalTime openTime, LocalTime closeTime) {
+        StoreEntity store = storeRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
+
+        if (storeName == null && storeContents == null && minOrderPrice == null && openTime == null && closeTime == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정할 항목을 입력해주세요");
+        }
+
+        if (storeName != null) {
+            store.setStoreName(storeName);
+        }
+
+        if (storeContents != null) {
+            store.setStoreContents(storeContents);
+        }
+
+        if (minOrderPrice != null) {
+            store.setMinOrderPrice(minOrderPrice);
+        }
+
+        if (openTime != null) {
+            store.setOpenTime(openTime);
+        }
+
+        if (closeTime != null) {
+            store.setCloseTime(closeTime);
+        }
+
+        storeRepository.save(store);
     }
 }
