@@ -1,7 +1,6 @@
 package com.sparta.nalda.service.menu;
 
-import com.sparta.nalda.common.MessageResponse;
-import com.sparta.nalda.dto.menu.CreateMenuRequestDto;
+
 import com.sparta.nalda.dto.menu.MenuResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.StoreEntity;
@@ -11,12 +10,12 @@ import com.sparta.nalda.repository.StoreRepository;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.StoreStatus;
 import com.sparta.nalda.util.UserRole;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.*;
 
 @Service
 @RequiredArgsConstructor
@@ -83,6 +82,7 @@ public class MenuServiceImpl implements MenuService {
      * @param price
      */
     @Override
+    @Transactional
     public void updateMenu(Long id, Long userId, Long storeId, String menuName, String menuContents, Long price) {
 
         validateUserAndStore(userId, storeId);
@@ -107,6 +107,21 @@ public class MenuServiceImpl implements MenuService {
         }
 
         menuRepository.save(menu);
+    }
+
+    /**
+     * 메뉴 삭제
+     * @param id
+     */
+    @Override
+    public void deleteMenu(Long id, Long userId, Long storeId) {
+
+        validateUserAndStore(userId, storeId);
+
+        MenuEntity menu = menuRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+
+        menuRepository.delete(menu);
     }
 
     void validateUserAndStore(Long userId, Long storeId) {
