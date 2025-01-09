@@ -3,28 +3,33 @@ package com.sparta.nalda.filter;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.nalda.dto.user.NaldaUserDetails;
+import com.sparta.nalda.util.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
-@RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final TokenProvider tokenProvider;
 
-    public LoginFilter(AuthenticationManager authenticationManager) {
+    public LoginFilter(AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
         super.setAuthenticationManager(authenticationManager);
+        this.tokenProvider = tokenProvider;
         setFilterProcessesUrl("/login");
     }
 
@@ -61,6 +66,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         HttpServletResponse response, FilterChain chain, Authentication authResult)
         throws IOException, ServletException {
         log.info("Successful");
+
+
+        String token = tokenProvider.createToken(authResult);
+        response.addHeader("Authorization", "Bearer " + token);
     }
 
     @Override
@@ -68,5 +77,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         HttpServletResponse response, AuthenticationException failed)
         throws IOException, ServletException {
         log.info("failed");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
