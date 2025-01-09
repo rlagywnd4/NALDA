@@ -2,6 +2,7 @@ package com.sparta.nalda.controller;
 
 import com.sparta.nalda.common.MessageResponse;
 import com.sparta.nalda.dto.menu.CreateMenuRequestDto;
+import com.sparta.nalda.dto.menu.DeleteMenuRequestDto;
 import com.sparta.nalda.dto.menu.UpdateMenuRequestDto;
 import com.sparta.nalda.service.menu.MenuService;
 import jakarta.validation.Valid;
@@ -62,8 +63,8 @@ public class OwnerMenuController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<MessageResponse> deleteMenu (@PathVariable Long id) {
-        menuService.deleteMenu(id);
+    public ResponseEntity<MessageResponse> deleteMenu (@PathVariable Long id, @Valid @RequestBody DeleteMenuRequestDto dto) {
+        menuService.deleteMenu(id, dto.getUserId(), dto.getStoreId());
         return ResponseEntity.ok(new MessageResponse("삭제 되었습니다."));
     }
 }
