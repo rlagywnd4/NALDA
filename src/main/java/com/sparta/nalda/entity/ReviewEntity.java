@@ -2,6 +2,7 @@ package com.sparta.nalda.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "reviews")
@@ -14,7 +15,7 @@ public class ReviewEntity extends BaseEntity {
     private String reviewContents;
 
     @Column
-    @Size(min = 1, max = 5)
+    @Range(min = 1, max = 5)
     private Integer starScore;
 
     @OneToOne
@@ -28,4 +29,13 @@ public class ReviewEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    public ReviewEntity(OrderEntity order, String reviewContents, Integer starScore) {
+        this.order = order;
+        this.reviewContents = reviewContents;
+        this.starScore = starScore;
+    }
+
+    public ReviewEntity() {
+    }
 }

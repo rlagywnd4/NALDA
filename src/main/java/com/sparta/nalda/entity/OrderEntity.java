@@ -27,6 +27,9 @@ public class OrderEntity extends BaseEntity {
     @JoinColumn(name = "menu_id")
     private MenuEntity menu;
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private ReviewEntity review;
+
     public OrderEntity(OrderStatus orderStatus, UserEntity user, MenuEntity menu) {
         this.orderStatus = orderStatus;
         this.user = user;
