@@ -28,7 +28,7 @@ public class UserEntity extends BaseEntity {
     private UserRole userRole;
 
     public UserEntity(String email, String password, String address,
-                      UserRole userRole) {
+        UserRole userRole) {
         this.email = email;
         this.password = password;
         this.address = address;
