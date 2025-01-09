@@ -1,5 +1,6 @@
 package com.sparta.nalda.service;
 
+import com.sparta.nalda.dto.OrderListResponseDto;
 import com.sparta.nalda.dto.OrderRequestDto;
 import com.sparta.nalda.dto.OrderResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
@@ -11,6 +12,7 @@ import com.sparta.nalda.repository.OrderRepository;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.OrderStatus;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +56,24 @@ public class OrderService {
         findOrder.getMenu().getMenuName(),
         store.getStoreName(),
         menu.getPrice());
+  }
+
+  public List<OrderListResponseDto> findAllOrderList() {
+
+    List<OrderEntity> orders = orderRepository.findAll();
+
+    //리스트 형식으로 변환
+    return orders.stream()
+    //        .map(OrderListResponseDto::order)
+        .map(order -> new OrderListResponseDto(
+            order.getOrderStatus(),
+            order.getCreatedAt(),
+            order.getMenu().getMenuName(),
+            order.getMenu().getStore().getStoreName(),
+            order.getMenu().getPrice()
+        ))
+        .toList();
+
   }
 
 }

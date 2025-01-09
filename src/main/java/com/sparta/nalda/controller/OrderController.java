@@ -1,12 +1,14 @@
 package com.sparta.nalda.controller;
 
 import com.sparta.nalda.common.MessageResponse;
+import com.sparta.nalda.dto.OrderListResponseDto;
 import com.sparta.nalda.dto.OrderRequestDto;
 import com.sparta.nalda.dto.OrderResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.OrderEntity;
 import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.service.OrderService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,14 @@ public class OrderController {
     OrderResponseDto orderResponseDto = orderService.findById(id);
 
     return ResponseEntity.status(HttpStatus.OK).body(orderResponseDto);
+  }
+
+  @GetMapping
+  public ResponseEntity<List<OrderListResponseDto>> findAllOrders() {
+
+    List<OrderListResponseDto> orderList = orderService.findAllOrderList();
+
+    return ResponseEntity.ok(orderList);
   }
 }
 
