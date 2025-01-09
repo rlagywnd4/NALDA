@@ -6,10 +6,7 @@ import com.sparta.nalda.service.store.StoreServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/owners/stores")
@@ -27,4 +24,22 @@ public class OwnerStoreController {
         return ResponseEntity.ok(new MessageResponse("가게가 생성되었습니다."));
     }
 
+    /**
+     * 가게 수정
+     * @param id
+     * @param dto
+     * @return
+     */
+    @PatchMapping("/{id}")
+    public ResponseEntity<MessageResponse> updateStore(@PathVariable Long id, @Valid @RequestBody CreateStoreRequestDto dto) {
+        storeService.updateStore(
+                id,
+                dto.getStoreName(),
+                dto.getStoreContents(),
+                dto.getMinOrderPrice(),
+                dto.getOpenTime(),
+                dto.getCloseTime()
+        );
+        return ResponseEntity.ok(new MessageResponse("가게 정보 수정되었습니다."));
+    }
 }
