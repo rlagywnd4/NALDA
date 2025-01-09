@@ -6,4 +6,5 @@ public interface UserService {
 
     UserResponseDto getUser(Long id);
 
+    void updateUserAddress(Long id, String address);
 }
