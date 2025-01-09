@@ -9,4 +9,7 @@ public interface UserService {
     void updateUserAddress(Long id, String address);
 
     void updateUserPassword(Long userId, String oldPassword, String newPassword);
+
+    void deleteUser(Long userId, String password);
+
 }
