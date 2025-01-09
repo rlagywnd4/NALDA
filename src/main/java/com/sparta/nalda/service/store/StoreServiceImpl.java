@@ -1,17 +1,27 @@
 package com.sparta.nalda.service.store;
 
 import com.sparta.nalda.dto.store.StoreAndMenusResponseDto;
+import com.sparta.nalda.dto.store.StoresResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
+import com.sparta.nalda.entity.ReviewEntity;
 import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.repository.MenuRepository;
+import com.sparta.nalda.repository.ReviewRepository;
 import com.sparta.nalda.repository.StoreRepository;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.StoreStatus;
 import com.sparta.nalda.util.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import org.springframework.http.HttpStatus;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,6 +35,7 @@ public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
     private final MenuRepository menuRepository;
+    private final ReviewRepository reviewRepository;
 
     @Override
     @Transactional
@@ -75,6 +86,28 @@ public class StoreServiceImpl implements StoreService {
         return new StoreAndMenusResponseDto(store, menus);
     }
 
+    @Override
+    @Transactional
+    public Page<StoresResponseDto> getStores(
+            String searchKeyword,
+            String sortBy,
+            int page,
+            int size
+    ) {
+        Sort sort = Sort.by(Sort.Order.by(sortBy));
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<StoreEntity> stores = storeRepository.findByStoreNameContaining(searchKeyword, pageable);
+
+        return stores.map(store -> StoresResponseDto.of(store,getAverageStarScore(store)));
+    }
+
+    public String getAverageStarScore(StoreEntity store){
+        List<ReviewEntity> reviews = reviewRepository.findStarScoreByStoreId(store.getId());
+
+        return String.format("%.1f",
+                reviews.stream().mapToDouble(ReviewEntity::getStarScore).average().orElse(0.0));
+    }
 
     /**
      * 가게 수정
