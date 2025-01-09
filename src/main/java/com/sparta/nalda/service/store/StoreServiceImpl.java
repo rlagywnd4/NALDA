@@ -1,7 +1,10 @@
 package com.sparta.nalda.service.store;
 
+import com.sparta.nalda.dto.store.StoreAndMenusResponseDto;
+import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.entity.UserEntity;
+import com.sparta.nalda.repository.MenuRepository;
 import com.sparta.nalda.repository.StoreRepository;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.StoreStatus;
@@ -11,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
+    private final MenuRepository menuRepository;
 
     @Override
     @Transactional
@@ -55,4 +60,16 @@ public class StoreServiceImpl implements StoreService {
         storeRepository.save(store);
     }
 
+    @Override
+    @Transactional
+    public StoreAndMenusResponseDto getStoreAndMenus(Long storeId) {
+
+        StoreEntity store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new IllegalArgumentException("Store with ID " + storeId + " not found"));
+
+        // TODO: menu를 가져올때 user는 가져오지 않을 수 있도록 하는 기능 추가(필수기능 마무리후)
+        List<MenuEntity> menus = menuRepository.findAllByStoreId(storeId);
+
+        return new StoreAndMenusResponseDto(store, menus);
+    }
 }
