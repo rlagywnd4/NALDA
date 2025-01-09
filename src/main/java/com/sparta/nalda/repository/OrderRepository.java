@@ -18,4 +18,9 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
   // 특정 사용자(userId)의 주문 목록 조회
   List<OrderEntity> findAll();
 
+
+  List<OrderEntity> findAllByMenu_Store_User_Id(Long ownerId);
+
+
+
 }

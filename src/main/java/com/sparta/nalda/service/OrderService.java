@@ -3,6 +3,7 @@ package com.sparta.nalda.service;
 import com.sparta.nalda.dto.OrderListResponseDto;
 import com.sparta.nalda.dto.OrderRequestDto;
 import com.sparta.nalda.dto.OrderResponseDto;
+import com.sparta.nalda.dto.OwnerOrderResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.OrderEntity;
 import com.sparta.nalda.entity.StoreEntity;
@@ -62,8 +63,9 @@ public class OrderService {
 
     List<OrderEntity> orders = orderRepository.findAll();
 
-    //리스트 형식으로 변환
+    // 리스트 형식으로 변환
     return orders.stream()
+//        .map(OrderListResponseDto::new)
     //        .map(OrderListResponseDto::order)
         .map(order -> new OrderListResponseDto(
             order.getOrderStatus(),
@@ -76,4 +78,22 @@ public class OrderService {
 
   }
 
+  public List<OwnerOrderResponseDto> findAllOrderListOwner(Long ownerId) {
+
+    List<OrderEntity> orders = orderRepository.findAllByMenu_Store_User_Id(ownerId);
+
+    // 리스트 형식으로 변환
+    return orders.stream()
+        .map(order -> new OwnerOrderResponseDto(
+            order.getId(),
+            order.getUser().getEmail(),
+            order.getUser().getAddress(),
+            order.getMenu().getMenuName(),
+            order.getMenu().getStore().getStoreName(),
+            order.getMenu().getPrice()
+        ))
+        .toList();
+
+
+  }
 }
