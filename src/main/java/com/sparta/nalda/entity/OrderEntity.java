@@ -7,7 +7,7 @@ import lombok.Getter;
 @Entity
 @Getter
 @Table(name = "menu_orders")
-public class OrderEntity {
+public class OrderEntity extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

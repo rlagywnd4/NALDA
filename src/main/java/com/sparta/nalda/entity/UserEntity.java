@@ -27,7 +27,8 @@ public class UserEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public UserEntity(String email, String password, String address,UserRole userRole) {
+    public UserEntity(String email, String password, String address,
+                      UserRole userRole) {
         this.email = email;
         this.password = password;
         this.address = address;
