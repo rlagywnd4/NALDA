@@ -1,6 +1,6 @@
 package com.sparta.nalda.entity;
 
-import com.sparta.nalda.util.userRole;
+import com.sparta.nalda.util.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "nalda_users")
 public class UserEntity extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 50)
@@ -25,10 +26,10 @@ public class UserEntity extends BaseEntity {
 
     @Column(length = 10)
     @Enumerated(EnumType.STRING)
-    private userRole userRole;
+    private UserRole userRole;
 
     public UserEntity(String email, String password, String address,
-        com.sparta.nalda.util.userRole userRole) {
+                      UserRole userRole) {
         this.email = email;
         this.password = password;
         this.address = address;
