@@ -18,6 +18,7 @@ public class ReviewEntity extends BaseEntity {
     @Range(min = 1, max = 5)
     private Integer starScore;
 
+
     @OneToOne
     @JoinColumn(name = "order_id")
     private OrderEntity order;
