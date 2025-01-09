@@ -1,7 +1,7 @@
 package com.sparta.nalda.controller;
 
-import com.sparta.nalda.dto.OwnerOrderResponseDto;
-import com.sparta.nalda.service.OrderService;
+import com.sparta.nalda.dto.order.OwnerOrderResponseDto;
+import com.sparta.nalda.service.order.OrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,10 @@ public class OwnersOrderController {
 
   private final OrderService orderService;
 
-  @GetMapping("/{ownerId}")
-  public ResponseEntity<List<OwnerOrderResponseDto>> findAllOwnerOrderResponseDto(@PathVariable Long ownerId) {
+  @GetMapping()
+  public ResponseEntity<List<OwnerOrderResponseDto>> findAllOwnerOrderResponseDto() {
+
+    Long ownerId = 1L;
 
     List<OwnerOrderResponseDto> orderListOwner = orderService.findAllOrderListOwner(ownerId);
 

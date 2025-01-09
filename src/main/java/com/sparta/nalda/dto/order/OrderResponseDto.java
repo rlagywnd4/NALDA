@@ -1,8 +1,5 @@
-package com.sparta.nalda.dto;
+package com.sparta.nalda.dto.order;
 
-import com.sparta.nalda.entity.MenuEntity;
-import com.sparta.nalda.entity.StoreEntity;
-import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.util.OrderStatus;
 import java.time.LocalDateTime;
 import lombok.Getter;

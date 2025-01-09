@@ -19,7 +19,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
   List<OrderEntity> findAll();
 
 
-  List<OrderEntity> findAllByMenu_Store_User_Id(Long ownerId);
+  List<OrderEntity> findAllByMenuStoreUserId(Long ownerId);
 
 
 

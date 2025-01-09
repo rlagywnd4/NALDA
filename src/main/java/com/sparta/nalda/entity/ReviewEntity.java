@@ -15,7 +15,7 @@ public class ReviewEntity extends BaseEntity {
 
     @Column
     @Size(min = 1, max = 5)
-    private Integer starScore;
+    private int starScore;
 
     @OneToOne
     @JoinColumn(name = "order_id")

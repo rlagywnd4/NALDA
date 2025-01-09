@@ -1,4 +1,4 @@
-package com.sparta.nalda.dto;
+package com.sparta.nalda.dto.order;
 
 import com.sparta.nalda.entity.OrderEntity;
 import com.sparta.nalda.util.OrderStatus;

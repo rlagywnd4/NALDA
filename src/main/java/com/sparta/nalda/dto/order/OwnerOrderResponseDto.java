@@ -1,4 +1,4 @@
-package com.sparta.nalda.dto;
+package com.sparta.nalda.dto.order;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

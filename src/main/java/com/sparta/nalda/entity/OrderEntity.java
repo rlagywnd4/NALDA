@@ -27,6 +27,10 @@ public class OrderEntity extends BaseEntity {
     @JoinColumn(name = "menu_id")
     private MenuEntity menu;
 
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private OrderEntity order;
+
     public OrderEntity(OrderStatus orderStatus, UserEntity user, MenuEntity menu) {
         this.orderStatus = orderStatus;
         this.user = user;

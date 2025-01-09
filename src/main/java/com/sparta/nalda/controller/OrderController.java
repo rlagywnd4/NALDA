@@ -1,13 +1,10 @@
 package com.sparta.nalda.controller;
 
 import com.sparta.nalda.common.MessageResponse;
-import com.sparta.nalda.dto.OrderListResponseDto;
-import com.sparta.nalda.dto.OrderRequestDto;
-import com.sparta.nalda.dto.OrderResponseDto;
-import com.sparta.nalda.entity.MenuEntity;
-import com.sparta.nalda.entity.OrderEntity;
-import com.sparta.nalda.entity.StoreEntity;
-import com.sparta.nalda.service.OrderService;
+import com.sparta.nalda.dto.order.OrderListResponseDto;
+import com.sparta.nalda.dto.order.OrderRequestDto;
+import com.sparta.nalda.dto.order.OrderResponseDto;
+import com.sparta.nalda.service.order.OrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

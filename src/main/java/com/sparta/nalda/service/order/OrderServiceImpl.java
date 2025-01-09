@@ -1,9 +1,9 @@
-package com.sparta.nalda.service;
+package com.sparta.nalda.service.order;
 
-import com.sparta.nalda.dto.OrderListResponseDto;
-import com.sparta.nalda.dto.OrderRequestDto;
-import com.sparta.nalda.dto.OrderResponseDto;
-import com.sparta.nalda.dto.OwnerOrderResponseDto;
+import com.sparta.nalda.dto.order.OrderListResponseDto;
+import com.sparta.nalda.dto.order.OrderRequestDto;
+import com.sparta.nalda.dto.order.OrderResponseDto;
+import com.sparta.nalda.dto.order.OwnerOrderResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.OrderEntity;
 import com.sparta.nalda.entity.StoreEntity;
@@ -19,13 +19,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderServiceImpl implements OrderService {
 
   private final UserRepository userRepository;
   private final OrderRepository orderRepository;
   private final MenuRepository menuRepository;
 
   @Transactional
+  @Override
   public OrderEntity createOrder(OrderRequestDto requestDto) {
     // 사용자와 메뉴를 DB에서 조회
     UserEntity user = userRepository.findById(requestDto.getUser())
@@ -41,6 +42,7 @@ public class OrderService {
 
   }
 
+  @Override
   public OrderResponseDto findById(Long id) {
 
 
@@ -59,6 +61,7 @@ public class OrderService {
         menu.getPrice());
   }
 
+  @Override
   public List<OrderListResponseDto> findAllOrderList() {
 
     List<OrderEntity> orders = orderRepository.findAll();
@@ -66,7 +69,7 @@ public class OrderService {
     // 리스트 형식으로 변환
     return orders.stream()
 //        .map(OrderListResponseDto::new)
-    //        .map(OrderListResponseDto::order)
+        //        .map(OrderListResponseDto::order)
         .map(order -> new OrderListResponseDto(
             order.getOrderStatus(),
             order.getCreatedAt(),
@@ -78,9 +81,12 @@ public class OrderService {
 
   }
 
+
+
+  @Override
   public List<OwnerOrderResponseDto> findAllOrderListOwner(Long ownerId) {
 
-    List<OrderEntity> orders = orderRepository.findAllByMenu_Store_User_Id(ownerId);
+    List<OrderEntity> orders = orderRepository.findAllByMenuStoreUserId(ownerId);
 
     // 리스트 형식으로 변환
     return orders.stream()
@@ -96,4 +102,5 @@ public class OrderService {
 
 
   }
+
 }
