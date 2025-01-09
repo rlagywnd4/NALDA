@@ -3,7 +3,6 @@ package com.sparta.nalda.dto.user;
 import com.sparta.nalda.entity.UserEntity;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class NaldaUserDetails implements UserDetails {
 
     private final UserEntity userEntity;
+
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

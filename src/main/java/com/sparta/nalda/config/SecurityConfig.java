@@ -1,5 +1,6 @@
 package com.sparta.nalda.config;
 
+import com.sparta.nalda.filter.JWFilter;
 import com.sparta.nalda.filter.LoginFilter;
 import com.sparta.nalda.util.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +49,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            .addFilterBefore(new JWFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
             .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
