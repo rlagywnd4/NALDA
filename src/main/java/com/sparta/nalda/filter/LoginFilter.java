@@ -41,8 +41,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             String email = loginRequestDto.getEmail();
             String password = loginRequestDto.getPassword();
 
-            log.info("Attempting to authenticate user with email: " + email);
-            log.info("Attempting to authenticate user with password: " + password);
+            log.info("email: " + email);
+            log.info("password: " + password);
 
             UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(email, password, null);

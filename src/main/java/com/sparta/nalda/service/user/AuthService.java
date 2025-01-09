@@ -20,7 +20,7 @@ public class AuthService implements UserDetailsService {
         UserEntity user = userRepository.findByEmail(email);
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
+            throw new UsernameNotFoundException("유저를 찾을 수 없습니다 : " + email);
         }
 
         return new NaldaUserDetails(user);
