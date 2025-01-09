@@ -25,13 +25,4 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("회원가입에 성공하였습니다."));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody @Valid LoginRequestDto dto) {
-        return ResponseEntity.ok(new LoginResponseDto(authService.login(dto.getEmail(), dto.getPassword())));
-    }
-
-//    @GetMapping("/test")
-//    public void test() {
-//        authService.test();
-//    }
 }
