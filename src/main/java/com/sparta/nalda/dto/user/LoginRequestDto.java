@@ -1,25 +1,29 @@
 package com.sparta.nalda.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public class LoginRequestDto {
 
-    private final String EMAIL_REGEX = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
-    private final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
-
     @NotNull
-    @Pattern(regexp = EMAIL_REGEX)
+    @Pattern(regexp = UserValid.EMAIL_REGEX)
     private final String email;
 
     @NotBlank
-    @Pattern(regexp = PASSWORD_REGEX, message = "형식이 틀립니다.")
+    @Pattern(regexp = UserValid.PASSWORD_REGEX)
     private final String password;
 
-
+    @JsonCreator
+    public LoginRequestDto(
+        @JsonProperty("email") String email,
+        @JsonProperty("password") String password
+    ) {
+        this.email = email;
+        this.password = password;
+    }
 }
