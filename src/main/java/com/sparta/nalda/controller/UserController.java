@@ -1,6 +1,7 @@
 package com.sparta.nalda.controller;
 
 import com.sparta.nalda.dto.user.UserResponseDto;
+import com.sparta.nalda.service.user.UserService;
 import com.sparta.nalda.service.user.UserServiceImpl;
 import com.sparta.nalda.util.AuthUser;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<UserResponseDto> getUser() {
