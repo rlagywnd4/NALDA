@@ -1,8 +1,10 @@
 package com.sparta.nalda.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 @Table(name = "menus")
 public class MenuEntity extends BaseEntity {
 
@@ -21,5 +23,5 @@ public class MenuEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
-    private StoreEntity storeId;
+    private StoreEntity store;
 }
