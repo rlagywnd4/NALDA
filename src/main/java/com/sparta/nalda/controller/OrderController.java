@@ -29,7 +29,7 @@ public class OrderController {
   @PostMapping
   public ResponseEntity<MessageResponse> createOrder(@RequestBody OrderRequestDto dto) {
 
-    OrderEntity createdOrder = orderService.createOrder(dto);
+    orderService.createOrder(dto);
 
     return ResponseEntity.ok(new MessageResponse("주문이 완료되었습니다."));
 
