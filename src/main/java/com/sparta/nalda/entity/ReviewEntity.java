@@ -2,7 +2,9 @@ package com.sparta.nalda.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "reviews")
 public class ReviewEntity extends BaseEntity {

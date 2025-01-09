@@ -17,9 +17,9 @@ public class StoresResponseDto {
     private final LocalTime openTime;
     private final LocalTime closeTime;
 
-    private final float averageStarScore;
+    private final String averageStarScore;
 
-    public static StoresResponseDto of(StoreEntity store, float averageStarScore){
+    public static StoresResponseDto of(StoreEntity store, String averageStarScore){
         return new StoresResponseDto(
                 store.getStoreName(),
                 store.getStoreContents(),

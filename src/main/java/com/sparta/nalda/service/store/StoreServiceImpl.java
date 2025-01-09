@@ -3,15 +3,18 @@ package com.sparta.nalda.service.store;
 import com.sparta.nalda.dto.store.StoreAndMenusResponseDto;
 import com.sparta.nalda.dto.store.StoresResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
+import com.sparta.nalda.entity.ReviewEntity;
 import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.repository.MenuRepository;
+import com.sparta.nalda.repository.ReviewRepository;
 import com.sparta.nalda.repository.StoreRepository;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.StoreStatus;
 import com.sparta.nalda.util.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
@@ -28,6 +32,7 @@ public class StoreServiceImpl implements StoreService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
     private final MenuRepository menuRepository;
+    private final ReviewRepository reviewRepository;
 
     @Override
     @Transactional
@@ -86,15 +91,18 @@ public class StoreServiceImpl implements StoreService {
             int page,
             int size
     ) {
-        // 정렬 기준, 검색어에 따라 레파지토리에서 검색 결과를 가져와서 리턴
-        // 정렬 설정
         Sort sort = Sort.by(Sort.Order.by(sortBy));
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<StoreEntity> stores = storeRepository.findByStoreNameContaining(searchKeyword, pageable);
 
-        // 리뷰 테이블 가져와서 평균 구하기
+        return stores.map(store -> StoresResponseDto.of(store,getAverageStarScore(store)));
+    }
 
-        return stores.map(store -> StoresResponseDto.of(store, 1.0f));
+    public String getAverageStarScore(StoreEntity store){
+        List<ReviewEntity> reviews = reviewRepository.findStarScoreByStoreId(store.getId());
+
+        return String.format("%.1f",
+                reviews.stream().mapToDouble(ReviewEntity::getStarScore).average().orElse(0.0));
     }
 }
