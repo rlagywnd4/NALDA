@@ -3,6 +3,7 @@ package com.sparta.nalda.filter;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.nalda.dto.user.LoginRequestDto;
 import com.sparta.nalda.util.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,10 +36,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         HttpServletResponse response) throws AuthenticationException {
 
         try {
-            Map<String, String> requestBody = objectMapper.readValue(request.getInputStream(), Map.class);
+            LoginRequestDto loginRequestDto = objectMapper.readValue(request.getInputStream(), LoginRequestDto.class);
 
-            String email = requestBody.get("email");
-            String password = requestBody.get("password");
+            String email = loginRequestDto.getEmail();
+            String password = loginRequestDto.getPassword();
+
+            log.info("email: " + email);
+            log.info("password: " + password);
 
             UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(email, password, null);

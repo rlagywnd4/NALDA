@@ -13,11 +13,10 @@ public class WithDrawnEmailEntity extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
     @Column(length = 255)
     private String email;
 
+    public WithDrawnEmailEntity(String email) {
+        this.email = email;
+    }
 }

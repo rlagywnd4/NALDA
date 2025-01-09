@@ -2,7 +2,10 @@ package com.sparta.nalda.service.user;
 
 import com.sparta.nalda.dto.user.UserResponseDto;
 import com.sparta.nalda.entity.UserEntity;
+import com.sparta.nalda.entity.WithDrawnEmailEntity;
 import com.sparta.nalda.repository.UserRepository;
+import com.sparta.nalda.repository.WithDrawnEmailRepository;
+import com.sparta.nalda.util.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +16,24 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final WithDrawnEmailRepository withDrawnEmailRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Override
+    public void signup(String email, String password, String address, UserRole userRole) {
+        if(userRepository.existsByEmail(email)){
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+        }
+
+        if(withDrawnEmailRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("탈퇴한 회원 이메일입니다.");
+        }
+
+        String hashPassword = passwordEncoder.encode(password);
+        UserEntity user = new UserEntity(email, hashPassword, address, userRole);
+        userRepository.save(user);
+
+    }
 
     @Override
     public UserResponseDto getUser(Long userId) {
@@ -43,5 +63,22 @@ public class UserServiceImpl implements UserService {
 
         user.updatePassword(passwordEncoder.encode(newPassword));
     }
+
+    @Override
+    public void deleteUser(Long userId, String password) {
+        UserEntity user = userRepository.findByIdOrElseThrow(userId);
+
+        if(!passwordEncoder.matches(password, user.getPassword())){
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+
+        WithDrawnEmailEntity email = new WithDrawnEmailEntity(user.getEmail());
+
+        withDrawnEmailRepository.save(email);
+        userRepository.delete(user);
+
+    }
+
+
 
 }

@@ -11,15 +11,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SignupRequestDto {
 
-    private final String EMAIL_REGEX = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
-    private final String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,}$";
-
     @NotNull
-    @Pattern(regexp = EMAIL_REGEX)
+    @Pattern(regexp = UserValid.EMAIL_REGEX)
     private final String email;
 
     @NotBlank
-    @Pattern(regexp = PASSWORD_REGEX, message = "형식이 틀립니다.")
+    @Pattern(regexp = UserValid.PASSWORD_REGEX)
     private final String password;
 
     @NotBlank
