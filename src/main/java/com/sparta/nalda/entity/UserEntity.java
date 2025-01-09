@@ -34,4 +34,12 @@ public class UserEntity extends BaseEntity {
         this.userRole = userRole;
     }
 
+    public void updateAddress(String address) {
+        this.address = address;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
 }

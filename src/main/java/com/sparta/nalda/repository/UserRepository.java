@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
+    default UserEntity findByIdOrElseThrow(long id) {
+        return findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
     boolean existsByEmail(String email);
 
     UserEntity findByEmail(String email);

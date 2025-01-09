@@ -1,4 +1,4 @@
-package com.sparta.nalda.service;
+package com.sparta.nalda.service.user;
 
 import com.sparta.nalda.dto.user.NaldaUserDetails;
 import com.sparta.nalda.entity.UserEntity;
@@ -6,10 +6,6 @@ import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.TokenProvider;
 import com.sparta.nalda.util.UserRole;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
