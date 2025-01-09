@@ -33,24 +33,24 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<UserResponseDto> getUser() {
-        return ResponseEntity.ok(userService.getUser(AuthUser.getUserId()));
+        return ResponseEntity.ok(userService.getUser(AuthUser.getId()));
     }
 
     @PatchMapping("/users")
     public ResponseEntity<MessageResponse> updateUser(@RequestParam String address) {
-        userService.updateUserAddress(AuthUser.getUserId(), address);
+        userService.updateUserAddress(AuthUser.getId(), address);
         return ResponseEntity.ok(new MessageResponse("주소 수정이 완료되었습니다."));
     }
 
     @PatchMapping("/users/password")
     public ResponseEntity<MessageResponse> updatePassword(@RequestBody PasswordUpdateRequestDto dto) {
-        userService.updateUserPassword(AuthUser.getUserId(), dto.getOldPassword(), dto.getNewPassword());
+        userService.updateUserPassword(AuthUser.getId(), dto.getOldPassword(), dto.getNewPassword());
         return ResponseEntity.ok(new MessageResponse("비밀번호 수정이 완료되었습니다."));
     }
 
     @DeleteMapping("/users")
     public ResponseEntity<MessageResponse> deleteUser(@RequestParam String password) {
-        userService.deleteUser(AuthUser.getUserId(), password);
+        userService.deleteUser(AuthUser.getId(), password);
         return ResponseEntity.ok(new MessageResponse("유저 삭제가 완료되었습니다."));
     }
 
