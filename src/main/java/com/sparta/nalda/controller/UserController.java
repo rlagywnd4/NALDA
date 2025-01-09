@@ -1,6 +1,7 @@
 package com.sparta.nalda.controller;
 
 import com.sparta.nalda.common.MessageResponse;
+import com.sparta.nalda.dto.user.PasswordUpdateRequestDto;
 import com.sparta.nalda.dto.user.UserResponseDto;
 import com.sparta.nalda.service.user.UserService;
 import com.sparta.nalda.service.user.UserServiceImpl;
@@ -32,6 +33,12 @@ public class UserController {
     public ResponseEntity<MessageResponse> updateUser(@RequestParam String address) {
         userService.updateUserAddress(AuthUser.getUserId(), address);
         return ResponseEntity.ok(new MessageResponse("주소 수정이 완료되었습니다."));
+    }
+
+    @PatchMapping("/password")
+    public ResponseEntity<MessageResponse> updatePassword(@RequestBody PasswordUpdateRequestDto dto) {
+        userService.updateUserPassword(AuthUser.getUserId(), dto.getOldPassword(), dto.getNewPassword());
+        return ResponseEntity.ok(new MessageResponse("비밀번호 수정이 완료되었습니다."));
     }
 
 }
