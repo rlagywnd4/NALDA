@@ -44,4 +44,11 @@ public class StoreEntity extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    public void disableStore() {
+        if (StoreStatus.DISABLE.equals(this.status)) {
+            throw new IllegalArgumentException("이미 폐업 처리된 가게입니다.");
+        }
+        this.status = StoreStatus.DISABLE;
+    }
 }

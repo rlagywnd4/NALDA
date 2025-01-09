@@ -117,4 +117,17 @@ public class StoreServiceImpl implements StoreService {
 
         storeRepository.save(store);
     }
+
+    /**
+     * 가게 폐업 처리
+     * @param id
+     */
+    @Override
+    @Transactional
+    public void disableStore(Long id) {
+        StoreEntity store = storeRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
+
+        store.disableStore();
+    }
 }
