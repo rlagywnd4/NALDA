@@ -3,11 +3,13 @@ package com.sparta.nalda.entity;
 import com.sparta.nalda.util.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "menu_orders")
-public class OrderEntity extends BaseEntity{
+@NoArgsConstructor
+public class OrderEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +26,19 @@ public class OrderEntity extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "menu_id")
     private MenuEntity menu;
+
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private ReviewEntity review;
+
+
+    public OrderEntity(OrderStatus orderStatus, UserEntity user, MenuEntity menu) {
+        this.orderStatus = orderStatus;
+        this.user = user;
+        this.menu = menu;
+    }
+
+    public void updateStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }
