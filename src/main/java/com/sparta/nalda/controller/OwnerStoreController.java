@@ -42,4 +42,16 @@ public class OwnerStoreController {
         );
         return ResponseEntity.ok(new MessageResponse("가게 정보 수정되었습니다."));
     }
+
+    /**
+     * 가게 폐업 처리
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> disableStore(@PathVariable Long id) {
+        storeService.disableStore(id);
+
+        return ResponseEntity.ok(new MessageResponse("폐업 처리가 완료 되었습니다."));
+    }
 }
