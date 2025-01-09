@@ -23,5 +23,5 @@ public class MenuEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
-    private StoreEntity storeId;
+    private StoreEntity store;
 }
