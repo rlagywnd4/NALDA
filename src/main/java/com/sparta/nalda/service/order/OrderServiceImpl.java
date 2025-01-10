@@ -14,7 +14,6 @@ import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.OrderStatus;
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -72,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
 //        .map(OrderListResponseDto::new)
         //        .map(OrderListResponseDto::order)
         .map(order -> new OrderListResponseDto(
+            order.getId(),
             order.getOrderStatus(),
             order.getCreatedAt(),
             order.getMenu().getMenuName(),
@@ -111,6 +111,11 @@ public class OrderServiceImpl implements OrderService {
     // 주문 조회 및 예외 처리
     OrderEntity order = orderRepository.findById(orderId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+
+    // 현재 상태와 변경하려는 상태가 동일한 경우 예외 발생
+    if (order.getOrderStatus() == orderStatus) {
+      throw new IllegalArgumentException("이미 '" + orderStatus + "' 상태입니다.");
+    }
 
     // 상태 업데이트
     order.updateStatus(orderStatus);
