@@ -6,6 +6,7 @@ import com.sparta.nalda.dto.order.OrderResponseDto;
 import com.sparta.nalda.dto.order.OwnerOrderResponseDto;
 import com.sparta.nalda.entity.OrderEntity;
 
+import com.sparta.nalda.util.OrderStatus;
 import java.util.List;
 
 
@@ -19,5 +20,5 @@ public interface OrderService {
 
   List<OwnerOrderResponseDto> findAllOrderListOwner(Long ownerId);
 
-
+  void updateOrderStatus(Long orderId, OrderStatus orderStatus);
 }
