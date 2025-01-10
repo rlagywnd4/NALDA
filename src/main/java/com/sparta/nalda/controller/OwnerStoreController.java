@@ -3,7 +3,6 @@ package com.sparta.nalda.controller;
 import com.sparta.nalda.common.MessageResponse;
 import com.sparta.nalda.dto.store.CreateStoreRequestDto;
 import com.sparta.nalda.service.store.StoreServiceImpl;
-import com.sparta.nalda.util.AuthUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
