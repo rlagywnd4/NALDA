@@ -1,9 +1,10 @@
 package com.sparta.nalda.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
+@Getter
 @Entity
 @Table(name = "reviews")
 public class ReviewEntity extends BaseEntity {
