@@ -13,9 +13,11 @@ import java.io.IOException;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j
@@ -64,6 +66,16 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         throws IOException, ServletException {
 
         String token = tokenProvider.createToken(authResult);
+
+        response.setContentType("application/json; charset=UTF-8");
+
+        String jsonResponse = String.format(
+            "{\"message\": \"로그인에 성공했습니다.\", \"token\": \"Bearer %s\"}",
+            token
+        );
+
+        response.getWriter().write(jsonResponse);
+
         response.addHeader("Authorization", "Bearer " + token);
     }
 
@@ -72,6 +84,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         HttpServletResponse response, AuthenticationException failed)
         throws IOException, ServletException {
         log.info("failed");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if (failed instanceof BadCredentialsException) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        } else if (failed instanceof UsernameNotFoundException) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
     }
 }

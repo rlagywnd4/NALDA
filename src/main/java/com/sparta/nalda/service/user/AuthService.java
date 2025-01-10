@@ -2,6 +2,8 @@ package com.sparta.nalda.service.user;
 
 import com.sparta.nalda.dto.user.NaldaUserDetails;
 import com.sparta.nalda.entity.UserEntity;
+import com.sparta.nalda.exception.ErrorCode;
+import com.sparta.nalda.exception.NdException;
 import com.sparta.nalda.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +22,7 @@ public class AuthService implements UserDetailsService {
         UserEntity user = userRepository.findByEmail(email);
 
         if (user == null) {
-            throw new UsernameNotFoundException("유저를 찾을 수 없습니다 : " + email);
+            throw new NdException(ErrorCode.USER_NOT_FOUND);
         }
 
         return new NaldaUserDetails(user);
