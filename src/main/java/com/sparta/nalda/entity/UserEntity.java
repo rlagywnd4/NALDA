@@ -1,6 +1,7 @@
 package com.sparta.nalda.entity;
 
 import com.sparta.nalda.util.UserRole;
+import com.sparta.nalda.util.UserStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,12 +28,16 @@ public class UserEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
     public UserEntity(String email, String password, String address,
         UserRole userRole) {
         this.email = email;
         this.password = password;
         this.address = address;
         this.userRole = userRole;
+        this.status = UserStatus.ENABLED;
     }
 
     public void updateAddress(String address) {

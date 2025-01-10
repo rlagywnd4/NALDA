@@ -7,6 +7,7 @@ import com.sparta.nalda.dto.user.UserResponseDto;
 import com.sparta.nalda.service.user.UserService;
 import com.sparta.nalda.util.AuthUser;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,11 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<UserResponseDto> getUser() {
         return ResponseEntity.ok(userService.getUser(AuthUser.getId()));
+    }
+
+    @GetMapping("/userList")
+    public ResponseEntity<List<UserResponseDto>> getUserList() {
+        return ResponseEntity.ok(userService.getUsers());
     }
 
     @PatchMapping("/users")

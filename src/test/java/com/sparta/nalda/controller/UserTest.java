@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.nalda.common.MessageResponse;
 import com.sparta.nalda.dto.user.SignupRequestDto;
@@ -15,10 +16,12 @@ import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.AuthUser;
 import com.sparta.nalda.util.UserRole;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,10 +36,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+@Slf4j
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
-class UserTest {
+public class UserTest {
 
     private static final String BASE_URL = "/users";
 
@@ -112,13 +116,50 @@ class UserTest {
     @Test
     void getUser() throws Exception {
         //when
-        ResultActions result = mockMvc.perform(
-            get("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-        );
+        ResultActions result = mockMvc.perform(get(BASE_URL));
 
         //then
         result.andExpect(status().isOk());
+    }
+
+    @Test
+    void getUsers() throws Exception {
+        //given
+        long start = System.currentTimeMillis();
+        log.info("유저 생성 시작 : {}ms", start);
+
+        // 대량 데이터 생성
+        List<UserEntity> users = new ArrayList<>();
+        for (int i = 1; i <= 100; i++) {
+            UserEntity user = new UserEntity(
+                "test" + i + "@test.com",
+                passwordEncoder.encode("Password" + i),
+                "Address " + i,
+                UserRole.CUSTOMER
+            );
+            users.add(user);
+        }
+
+        long end = System.currentTimeMillis();
+        log.info("유저 100명 생성 : {}ms", end - start);
+
+        userRepository.saveAll(users);
+
+        long findUsersStart = System.currentTimeMillis();
+        log.info("유저 조회 시작 : {}ms", findUsersStart);
+
+        //when
+        ResultActions result = mockMvc.perform(get("/userList"));
+
+        //then
+        result.andExpect(status().isOk());
+
+        long findUsersEnd = System.currentTimeMillis();
+        log.info("유저 조회 끝 : {}ms", findUsersEnd - findUsersStart);
+
+        String contentAsString = result.andReturn().getResponse().getContentAsString();
+        List<?> userList = objectMapper.readValue(contentAsString, List.class);
+        assertThat(userList.size()).isEqualTo(101);
     }
 
 
@@ -141,6 +182,7 @@ class UserTest {
         UserEntity updatedUser = userRepository.findById(AuthUser.getId()).orElseThrow();
         assertThat(updatedUser.getAddress()).isEqualTo(updatedAddress);
     }
+
 
     @Test
     void updatePassword() throws Exception {

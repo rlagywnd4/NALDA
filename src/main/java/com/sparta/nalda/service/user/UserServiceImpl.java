@@ -8,6 +8,7 @@ import com.sparta.nalda.exception.NdException;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.repository.WithDrawnEmailRepository;
 import com.sparta.nalda.util.UserRole;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,19 @@ public class UserServiceImpl implements UserService {
         UserEntity user = new UserEntity(email, hashPassword, address, userRole);
         userRepository.save(user);
 
+    }
+
+    @Override
+    public List<UserResponseDto> getUsers() {
+
+        return userRepository.findAllEnabledUsers()
+            .stream()
+            .map(user -> new UserResponseDto(
+                user.getEmail(),
+                user.getUserRole(),
+                user.getAddress()
+            ))
+            .toList();
     }
 
     @Override
@@ -74,9 +88,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
-        WithDrawnEmailEntity email = new WithDrawnEmailEntity(user.getEmail());
-
-        withDrawnEmailRepository.save(email);
         userRepository.delete(user);
 
     }

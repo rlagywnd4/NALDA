@@ -2,6 +2,7 @@ package com.sparta.nalda.service.user;
 
 import com.sparta.nalda.dto.user.UserResponseDto;
 import com.sparta.nalda.util.UserRole;
+import java.util.List;
 
 public interface UserService {
 
@@ -15,4 +16,5 @@ public interface UserService {
 
     void signup(String email, String password, String address, UserRole userRole);
 
+    List<UserResponseDto> getUsers();
 }
