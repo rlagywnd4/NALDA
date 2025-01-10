@@ -3,6 +3,7 @@ package com.sparta.nalda.controller;
 import com.sparta.nalda.common.MessageResponse;
 import com.sparta.nalda.dto.store.CreateStoreRequestDto;
 import com.sparta.nalda.service.store.StoreServiceImpl;
+import com.sparta.nalda.util.AuthUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class OwnerStoreController {
     @PostMapping
     public ResponseEntity<MessageResponse> saveStore(@RequestBody @Valid CreateStoreRequestDto dto) {
         //@AuthenticationPrincipal Long userId 매개변수에 추가 필요
-        Long userId = 1L;
+        Long userId = AuthUser.getId();
         storeService.saveStore(userId, dto.getStoreName(), dto.getStoreContents(), dto.getMinOrderPrice(), dto.getOpenTime(), dto.getCloseTime());
         return ResponseEntity.ok(new MessageResponse("가게가 생성되었습니다."));
     }

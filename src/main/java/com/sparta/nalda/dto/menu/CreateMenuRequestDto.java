@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateMenuRequestDto {
 
-    private final Long userId;
-
     private final Long storeId;
 
     @NotBlank(message = "메뉴 이름을 입력해주세요.")
