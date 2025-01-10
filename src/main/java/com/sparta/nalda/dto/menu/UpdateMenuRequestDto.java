@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UpdateMenuRequestDto {
 
-    private final Long userId;
     private final Long storeId;
     private final String menuName;
     private final String menuContents;

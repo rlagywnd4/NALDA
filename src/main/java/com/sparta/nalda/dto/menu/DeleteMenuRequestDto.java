@@ -7,6 +7,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DeleteMenuRequestDto {
 
-    private final Long userId;
     private final Long storeId;
 }
