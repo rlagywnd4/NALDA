@@ -10,6 +10,7 @@ import com.sparta.nalda.repository.MenuRepository;
 import com.sparta.nalda.repository.ReviewRepository;
 import com.sparta.nalda.repository.StoreRepository;
 import com.sparta.nalda.repository.UserRepository;
+import com.sparta.nalda.util.AuthUser;
 import com.sparta.nalda.util.StoreStatus;
 import com.sparta.nalda.util.UserRole;
 import jakarta.transaction.Transactional;
@@ -40,7 +41,6 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public void saveStore(
-            Long userId,
             String storeName,
             String storeContents,
             Long minOrderPrice,
@@ -48,8 +48,8 @@ public class StoreServiceImpl implements StoreService {
             LocalTime closeTime
     ) {
         //TODO: 예외상황 수정 필요
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User with ID " + userId + " not found"));
+        UserEntity user = userRepository.findById(AuthUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("User with ID not found"));
 
         if (user.getUserRole().equals(UserRole.CUSTOMER)) {
             throw new IllegalArgumentException("customer can't create store");
@@ -102,12 +102,6 @@ public class StoreServiceImpl implements StoreService {
         return stores.map(store -> StoresResponseDto.of(store,getAverageStarScore(store)));
     }
 
-    public String getAverageStarScore(StoreEntity store){
-        List<ReviewEntity> reviews = reviewRepository.findStarScoreByStoreId(store.getId());
-
-        return String.format("%.1f",
-                reviews.stream().mapToDouble(ReviewEntity::getStarScore).average().orElse(0.0));
-    }
 
     /**
      * 가게 수정
@@ -123,6 +117,8 @@ public class StoreServiceImpl implements StoreService {
     public void updateStore(Long id, String storeName, String storeContents, Long minOrderPrice, LocalTime openTime, LocalTime closeTime) {
         StoreEntity store = storeRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
+
+        verifyIdentity(store, "본인만 가게를 수정할 수 있습니다.");
 
         if (storeName == null && storeContents == null && minOrderPrice == null && openTime == null && closeTime == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정할 항목을 입력해주세요");
@@ -161,6 +157,22 @@ public class StoreServiceImpl implements StoreService {
         StoreEntity store = storeRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
 
+        verifyIdentity(store, "본인만 가게를 폐업시킬 수 있습니다.");
+
         store.disableStore();
+    }
+
+
+    public String getAverageStarScore(StoreEntity store){
+        List<ReviewEntity> reviews = reviewRepository.findStarScoreByStoreId(store.getId());
+
+        return String.format("%.1f",
+                reviews.stream().mapToDouble(ReviewEntity::getStarScore).average().orElse(0.0));
+    }
+
+    public void verifyIdentity(StoreEntity store, String message){
+        if(!store.getUser().getId().equals(AuthUser.getId())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,message);
+        }
     }
 }
