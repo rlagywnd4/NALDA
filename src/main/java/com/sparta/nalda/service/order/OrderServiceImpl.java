@@ -108,11 +108,12 @@ public class OrderServiceImpl implements OrderService {
   @Transactional
   public void updateOrderStatus(Long orderId, OrderStatus orderStatus) {
 
-    // 주문 조회
-    Optional<OrderEntity> optionalOrder = orderRepository.findById(orderId);
+    // 주문 조회 및 예외 처리
+    OrderEntity order = orderRepository.findById(orderId)
+        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
 
     // 상태 업데이트
-    optionalOrder.ifPresent(order -> order.updateStatus(orderStatus));
+    order.updateStatus(orderStatus);
   }
 
 }
