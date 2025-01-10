@@ -26,7 +26,6 @@ public class OwnerMenuController {
     @PostMapping
     public ResponseEntity<MessageResponse> menuSave(@Valid @RequestBody CreateMenuRequestDto dto) {
         menuService.menuSave(
-                dto.getUserId(),
                 dto.getStoreId(),
                 dto.getMenuName(),
                 dto.getMenuContents(),
@@ -47,7 +46,6 @@ public class OwnerMenuController {
     public ResponseEntity<MessageResponse> updateMenu(@PathVariable Long id, @Valid @RequestBody UpdateMenuRequestDto dto) {
         menuService.updateMenu(
                 id,
-                dto.getUserId(),
                 dto.getStoreId(),
                 dto.getMenuName(),
                 dto.getMenuContents(),
@@ -64,7 +62,7 @@ public class OwnerMenuController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageResponse> deleteMenu (@PathVariable Long id, @Valid @RequestBody DeleteMenuRequestDto dto) {
-        menuService.deleteMenu(id, dto.getUserId(), dto.getStoreId());
+        menuService.deleteMenu(id, dto.getStoreId());
         return ResponseEntity.ok(new MessageResponse("삭제 되었습니다."));
     }
 }

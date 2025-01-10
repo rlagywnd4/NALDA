@@ -8,6 +8,7 @@ import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.repository.MenuRepository;
 import com.sparta.nalda.repository.StoreRepository;
 import com.sparta.nalda.repository.UserRepository;
+import com.sparta.nalda.util.AuthUser;
 import com.sparta.nalda.util.StoreStatus;
 import com.sparta.nalda.util.UserRole;
 import jakarta.transaction.Transactional;
@@ -28,14 +29,16 @@ public class MenuServiceImpl implements MenuService {
 
     /**
      * 메뉴 생성
-     * @param userId
      * @param storeId
      * @param menuName
      * @param menuContents
      * @param price
      */
     @Override
-    public void menuSave(Long userId, Long storeId, String menuName, String menuContents, Long price) {
+    public void menuSave(Long storeId, String menuName, String menuContents, Long price) {
+
+        //토큰에서 userId 추출
+        Long userId = AuthUser.getId();
 
         // 유저 확인
         UserEntity user = userRepository.findById(userId).orElseThrow(
@@ -49,6 +52,11 @@ public class MenuServiceImpl implements MenuService {
         // 가게 확인
         StoreEntity store = storeRepository.findById(storeId).orElseThrow(
                 () -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다."));
+
+        // 가게 소유주 확인
+        if (!store.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("가게 소유주만 메뉴를 생성할 수 있습니다.");
+        }
 
         // 가게가 폐업했을 때
         if (!StoreStatus.ENABLE.equals(store.getStatus())) {
@@ -75,7 +83,6 @@ public class MenuServiceImpl implements MenuService {
     /**
      * 메뉴수정
      * @param id
-     * @param userId
      * @param storeId
      * @param menuName
      * @param menuContents
@@ -83,9 +90,9 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     @Transactional
-    public void updateMenu(Long id, Long userId, Long storeId, String menuName, String menuContents, Long price) {
+    public void updateMenu(Long id, Long storeId, String menuName, String menuContents, Long price) {
 
-        validateUserAndStore(userId, storeId);
+        validateUserAndStore(storeId);
 
         // 메뉴 확인
         MenuEntity menu = menuRepository.findById(id).orElseThrow(
@@ -114,9 +121,9 @@ public class MenuServiceImpl implements MenuService {
      * @param id
      */
     @Override
-    public void deleteMenu(Long id, Long userId, Long storeId) {
+    public void deleteMenu(Long id, Long storeId) {
 
-        validateUserAndStore(userId, storeId);
+        validateUserAndStore(storeId);
 
         MenuEntity menu = menuRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
@@ -124,20 +131,31 @@ public class MenuServiceImpl implements MenuService {
         menuRepository.delete(menu);
     }
 
-    void validateUserAndStore(Long userId, Long storeId) {
+    void validateUserAndStore(Long storeId) {
+        //토큰에서 userId 추출
+        Long userId = AuthUser.getId();
+
         // 유저 확인
         UserEntity user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("유저를 찾을 수 없습니다.")
-        );
+                () -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        // 메뉴 생성 유저 권한 확인
+        if (!UserRole.OWNER.equals(user.getUserRole())) {
+            throw new IllegalArgumentException("메뉴를 생성할 권한이 없습니다.");
+        }
 
         // 가게 확인
         StoreEntity store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다.")
-        );
+                () -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다."));
 
-        // 메뉴 수정 유저 권한 확인
-        if (!store.getUser().equals(user)) {
-            throw new IllegalArgumentException("메뉴 작성자만 수정 할 수 있습니다.");
+        // 가게 소유주 확인
+        if (!store.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("가게 소유주만 가능합니다.");
+        }
+
+        // 가게가 폐업했을 때
+        if (!StoreStatus.ENABLE.equals(store.getStatus())) {
+            throw new IllegalArgumentException("폐업한 가게에는 메뉴를 추가할 수 없습니다.");
         }
     }
 }

@@ -18,7 +18,6 @@ public class OwnerStoreController {
     @PostMapping
     public ResponseEntity<MessageResponse> saveStore(@RequestBody @Valid CreateStoreRequestDto dto) {
         storeService.saveStore(dto.getStoreName(), dto.getStoreContents(), dto.getMinOrderPrice(), dto.getOpenTime(), dto.getCloseTime());
-
         return ResponseEntity.ok(new MessageResponse("가게가 생성되었습니다."));
     }
 
