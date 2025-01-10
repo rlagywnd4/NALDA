@@ -3,6 +3,8 @@ package com.sparta.nalda.service.user;
 import com.sparta.nalda.dto.user.UserResponseDto;
 import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.entity.WithDrawnEmailEntity;
+import com.sparta.nalda.exception.ErrorCode;
+import com.sparta.nalda.exception.NdException;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.repository.WithDrawnEmailRepository;
 import com.sparta.nalda.util.UserRole;
@@ -22,11 +24,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void signup(String email, String password, String address, UserRole userRole) {
         if(userRepository.existsByEmail(email)){
-            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+            throw new NdException(ErrorCode.EMAIL_ALREADY_EXISTS);
         }
 
         if(withDrawnEmailRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("탈퇴한 회원 이메일입니다.");
+            throw new NdException(ErrorCode.WITHDRAWN_USER);
         }
 
         String hashPassword = passwordEncoder.encode(password);
