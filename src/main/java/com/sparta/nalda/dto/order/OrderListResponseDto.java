@@ -23,12 +23,6 @@ public class OrderListResponseDto {
 
   private final Long menuPrice;
 
-//  public OrderListResponseDto(OrderEntity orderEntity) {
-//    this.orderStatus = orderEntity.getOrderStatus();
-//    this.orderTime = orderEntity.getCreatedAt();
-//    this.storeName = orderEntity.getMenu().getStore().getStoreName();
-//    this.menuName = orderEntity.getMenu().getMenuName();
-//    this.menuPrice = orderEntity.getMenu().getPrice();
   }
 
 
