@@ -48,7 +48,7 @@ public class MenuServiceImpl implements MenuService {
 
         // 메뉴 생성 유저 권한 확인
         if (!UserRole.OWNER.equals(user.getUserRole())) {
-            throw new IllegalArgumentException("메뉴를 생성할 권한이 없습니다.");
+            throw new NdException(ErrorCode.PERMISSION_DENIED_ERROR);
         }
 
         // 가게 확인
@@ -57,7 +57,7 @@ public class MenuServiceImpl implements MenuService {
 
         // 가게 소유주 확인
         if (!store.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("가게 소유주만 메뉴를 생성할 수 있습니다.");
+            throw new NdException(ErrorCode.PERMISSION_DENIED_ERROR);
         }
 
         // 가게가 폐업했을 때
