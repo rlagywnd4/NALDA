@@ -2,6 +2,8 @@ package com.sparta.nalda.service.review;
 
 import com.sparta.nalda.entity.OrderEntity;
 import com.sparta.nalda.entity.ReviewEntity;
+import com.sparta.nalda.exception.ErrorCode;
+import com.sparta.nalda.exception.NdException;
 import com.sparta.nalda.repository.OrderRepository;
 import com.sparta.nalda.repository.ReviewRepository;
 import com.sparta.nalda.util.OrderStatus;
@@ -24,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void createReview(Long orderId, String reviewContents, Integer starScore) {
         OrderEntity order = orderRepository.findById(orderId).orElseThrow(
-                () -> new IllegalArgumentException("주문을 찾을 수 없습니다."));
+                () -> new NdException(ErrorCode.ORDER_NOT_FOUND));
 
         //주문 상태 확인
         if (!OrderStatus.DELIVERED.equals(order.getOrderStatus())) {

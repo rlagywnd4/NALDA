@@ -5,6 +5,8 @@ import com.sparta.nalda.dto.menu.MenuResponseDto;
 import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.entity.UserEntity;
+import com.sparta.nalda.exception.ErrorCode;
+import com.sparta.nalda.exception.NdException;
 import com.sparta.nalda.repository.MenuRepository;
 import com.sparta.nalda.repository.StoreRepository;
 import com.sparta.nalda.repository.UserRepository;
@@ -42,7 +44,7 @@ public class MenuServiceImpl implements MenuService {
 
         // 유저 확인
         UserEntity user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+                () -> new NdException(ErrorCode.USER_NOT_FOUND));
 
         // 메뉴 생성 유저 권한 확인
         if (!UserRole.OWNER.equals(user.getUserRole())) {
@@ -51,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
 
         // 가게 확인
         StoreEntity store = storeRepository.findById(storeId).orElseThrow(
-                () -> new IllegalArgumentException("해당 가게를 찾을 수 없습니다."));
+                () -> new NdException(ErrorCode.STORE_NOT_FOUND));
 
         // 가게 소유주 확인
         if (!store.getUser().getId().equals(user.getId())) {
@@ -76,7 +78,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public MenuResponseDto findById(Long id) {
         MenuEntity menu = menuRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("해당 메뉴를 찾을 수 없습니다."));
+                () -> new NdException(ErrorCode.MENU_NOT_FOUND));
         return new MenuResponseDto(menu);
     }
 
@@ -96,7 +98,7 @@ public class MenuServiceImpl implements MenuService {
 
         // 메뉴 확인
         MenuEntity menu = menuRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+                () -> new NdException(ErrorCode.MENU_NOT_FOUND));
 
         // 수정할 요청 항목이 아무 값이 들어오지 않았을 경우
         if (menuName == null && menuContents == null && price == null) {
@@ -126,7 +128,7 @@ public class MenuServiceImpl implements MenuService {
         validateUserAndStore(storeId);
 
         MenuEntity menu = menuRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+                () -> new NdException(ErrorCode.MENU_NOT_FOUND));
 
         menuRepository.delete(menu);
     }
