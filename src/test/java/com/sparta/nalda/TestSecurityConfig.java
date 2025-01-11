@@ -1,14 +1,10 @@
-package com.sparta.nalda.config;
+package com.sparta.nalda;
 
 import com.sparta.nalda.filter.JWFilter;
 import com.sparta.nalda.filter.LoginFilter;
-import com.sparta.nalda.util.TokenProvider;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,21 +13,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Profile("!test")
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-public class SecurityConfig {
+@Profile("test") // 테스트 환경에서만 동작하도록 설정
+public class TestSecurityConfig {
 
-    private final AuthenticationConfiguration authenticationConfiguration;
-    private final TokenProvider tokenProvider;
-
-    //AuthenticationManager Bean 등록
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
-
+    // PasswordEncoder 빈 등록
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -43,18 +30,11 @@ public class SecurityConfig {
             .csrf((csrf) -> csrf.disable())
             .formLogin((auth) -> auth.disable())
             .httpBasic((httpBasic) -> httpBasic.disable())
-            .authorizeHttpRequests((auth) ->
-            auth.requestMatchers("/login", "/signup").permitAll()
-                .requestMatchers("/owners").hasRole("OWNER")
-                .anyRequest().authenticated()
-        )
+            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .addFilterBefore(new JWFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
-            .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), tokenProvider), UsernamePasswordAuthenticationFilter.class);
+            );
 
         return http.build();
     }
-
 }
