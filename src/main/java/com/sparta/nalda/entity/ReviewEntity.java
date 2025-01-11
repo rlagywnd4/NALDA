@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.Range;
 
 @Getter
 @Entity
-@Getter
 @Table(name = "reviews")
 public class ReviewEntity extends BaseEntity {
     @Id

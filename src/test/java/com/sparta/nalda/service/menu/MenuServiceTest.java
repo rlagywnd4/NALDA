@@ -10,16 +10,20 @@ import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.AuthUser;
 import com.sparta.nalda.util.StoreStatus;
 import com.sparta.nalda.util.UserRole;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import static org.mockito.Mockito.mockStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class MenuServiceTest {
 
@@ -37,6 +41,23 @@ public class MenuServiceTest {
 
     @Mock
     private AuthUser authUser;
+
+    private MockedStatic<AuthUser> mockAuthUser;
+
+    @BeforeEach
+    void 기본세팅() {
+        mockAuthUser = mockStatic(AuthUser.class);
+
+        UserEntity user = new UserEntity(
+                "test@test.com",
+                "Dlehdrjs12!",
+                "address",
+                UserRole.OWNER
+        );
+
+        UserEntity savedUser = userRepository.save(user);
+        mockAuthUser.when(AuthUser::getId).thenReturn(savedUser.getId());
+    }
 
     @Test
     void 메뉴생성 () {
