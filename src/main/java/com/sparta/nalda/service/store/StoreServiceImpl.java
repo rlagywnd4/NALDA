@@ -83,7 +83,9 @@ public class StoreServiceImpl implements StoreService {
         // TODO: menu를 가져올때 user는 가져오지 않을 수 있도록 하는 기능 추가(필수기능 마무리후)
         List<MenuEntity> menus = menuRepository.findAllByStoreId(storeId);
 
-        return new StoreAndMenusResponseDto(store, menus);
+        String averageStarScore = getAverageStarScore(store);
+
+        return new StoreAndMenusResponseDto(store, menus, averageStarScore);
     }
 
     @Override
