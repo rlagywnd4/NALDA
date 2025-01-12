@@ -42,10 +42,15 @@ public class OrderServiceImpl implements OrderService {
 
     LocalTime closeTime = menu.getStore().getCloseTime();
     LocalTime openTime = menu.getStore().getOpenTime();
+    Long minPrice = menu.getStore().getMinOrderPrice();
 
     if ((closeTime.isBefore(openTime) && (now.isAfter(closeTime) && now.isBefore(openTime))) ||
         (closeTime.isAfter(openTime) && (now.isAfter(closeTime) || now.isBefore(openTime)))) {
       throw new NdException(ErrorCode.TIME_OVER);
+    }
+
+    if (menu.getPrice() < minPrice) {
+      throw new NdException(ErrorCode.MIN_ORDER_PRICE_NOT_OVER);
     }
 
     // 주문 엔티티 생성
