@@ -22,6 +22,14 @@ public enum ErrorCode {
     INVALID_EMPTY(400, "값이 비었습니다."),
 
     /**
+     * ******************************* 401 Error Code ***************************************
+     */
+
+    ROLE_MISMATCH(401, "This request is not suitable for the current role."),
+    ENABLE_STORE_LIMITED_EXCEEDED(401,"You cannot activate more than 3 stores at the same time."),
+    STORE_OWNER_MISMATCH(401, "The action cannot be performed because you are not the owner of this store."),
+
+    /**
      * ******************************* 404 Error Code ***************************************
      */
 
@@ -30,6 +38,7 @@ public enum ErrorCode {
     MENU_NOT_FOUND(404, "매뉴를 찾을 수 없습니다."),
     ORDER_NOT_FOUND(404, "주문을 찾을 수 없습니다."),
     REVIEW_NOT_FOUND(404, "리뷰를 찾을 수 없습니다."),
+    MISSING_UPDATE_FIELD(404,"Update failed. No valid fields were provided in the request."),
 
 
 

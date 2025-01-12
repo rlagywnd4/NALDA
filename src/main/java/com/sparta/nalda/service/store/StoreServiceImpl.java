@@ -6,6 +6,8 @@ import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.ReviewEntity;
 import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.entity.UserEntity;
+import com.sparta.nalda.exception.ErrorCode;
+import com.sparta.nalda.exception.NdException;
 import com.sparta.nalda.repository.MenuRepository;
 import com.sparta.nalda.repository.ReviewRepository;
 import com.sparta.nalda.repository.StoreRepository;
@@ -21,10 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import org.springframework.http.HttpStatus;
-
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -47,17 +46,15 @@ public class StoreServiceImpl implements StoreService {
             LocalTime openTime,
             LocalTime closeTime
     ) {
-        //TODO: 예외상황 수정 필요
-        UserEntity user = userRepository.findById(AuthUser.getId())
-                .orElseThrow(() -> new IllegalArgumentException("User with ID not found"));
+        UserEntity user = userRepository.findByIdOrElseThrow(AuthUser.getId());
 
         if (user.getUserRole().equals(UserRole.CUSTOMER)) {
-            throw new IllegalArgumentException("customer can't create store");
+            throw new NdException(ErrorCode.ROLE_MISMATCH);
         }
 
         int enabledStoreCount = storeRepository.countByUserAndStatus(user, StoreStatus.ENABLE);
         if (enabledStoreCount >= 3) {
-            throw new IllegalArgumentException("활성화된 가게는 3개이상 생성할 수 없습니다.");
+            throw new NdException(ErrorCode.ENABLE_STORE_LIMITED_EXCEEDED);
         }
 
         StoreEntity store = StoreEntity.builder()
@@ -77,8 +74,7 @@ public class StoreServiceImpl implements StoreService {
     @Transactional
     public StoreAndMenusResponseDto getStoreAndMenus(Long storeId) {
 
-        StoreEntity store = storeRepository.findById(storeId)
-                .orElseThrow(() -> new IllegalArgumentException("Store with ID " + storeId + " not found"));
+        StoreEntity store = storeRepository.findByIdOrElseThrow(storeId);
 
         // TODO: menu를 가져올때 user는 가져오지 않을 수 있도록 하는 기능 추가(필수기능 마무리후)
         List<MenuEntity> menus = menuRepository.findAllByStoreId(storeId);
@@ -115,13 +111,12 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public void updateStore(Long id, String storeName, String storeContents, Long minOrderPrice, LocalTime openTime, LocalTime closeTime) {
-        StoreEntity store = storeRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
+        StoreEntity store = storeRepository.findByIdOrElseThrow(id);
 
-        verifyIdentity(store, "본인만 가게를 수정할 수 있습니다.");
+        verifyIdentity(store);
 
         if (storeName == null && storeContents == null && minOrderPrice == null && openTime == null && closeTime == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정할 항목을 입력해주세요");
+            throw new NdException(ErrorCode.MISSING_UPDATE_FIELD);
         }
 
         if (storeName != null) {
@@ -154,10 +149,8 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional
     public void disableStore(Long id) {
-        StoreEntity store = storeRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("가게를 찾을 수 없습니다."));
-
-        verifyIdentity(store, "본인만 가게를 폐업시킬 수 있습니다.");
+        StoreEntity store = storeRepository.findByIdOrElseThrow(id);
+        verifyIdentity(store);
 
         store.disableStore();
     }
@@ -170,9 +163,9 @@ public class StoreServiceImpl implements StoreService {
                 reviews.stream().mapToDouble(ReviewEntity::getStarScore).average().orElse(0.0));
     }
 
-    public void verifyIdentity(StoreEntity store, String message){
+    public void verifyIdentity(StoreEntity store){
         if(!store.getUser().getId().equals(AuthUser.getId())){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,message);
+            throw new NdException(ErrorCode.STORE_OWNER_MISMATCH);
         }
     }
 }
