@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class OrderRequestDto {
-  private final Long user;
-  private final Long menu;
+  private final Long menuId;
 
 }
