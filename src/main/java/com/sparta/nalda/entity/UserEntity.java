@@ -43,4 +43,12 @@ public class UserEntity extends BaseEntity {
         this.password = password;
     }
 
+    // test cord 생성자
+    public UserEntity(Long id, String email, String password, String address, UserRole userRole) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.userRole = userRole;
+    }
 }

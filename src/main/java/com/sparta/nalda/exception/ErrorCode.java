@@ -11,6 +11,7 @@ public enum ErrorCode {
     BAD_REQUEST_ERROR(400, "Bad Request Exception"),
     NOT_FOUND_ERROR(404, "Not Found Exception"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error Exception"),
+    PERMISSION_DENIED_ERROR(401, "권한이 없습니다."),
 
     /**
      * ******************************* 400 Error Code ***************************************
@@ -24,6 +25,14 @@ public enum ErrorCode {
     MIN_ORDER_PRICE_NOT_OVER(400, "최소 주문 금액을 채워주세요."),
 
     /**
+     * ******************************* 401 Error Code ***************************************
+     */
+
+    ROLE_MISMATCH(401, "This request is not suitable for the current role."),
+    ENABLE_STORE_LIMITED_EXCEEDED(401,"You cannot activate more than 3 stores at the same time."),
+    STORE_OWNER_MISMATCH(401, "The action cannot be performed because you are not the owner of this store."),
+
+    /**
      * ******************************* 404 Error Code ***************************************
      */
 
@@ -32,6 +41,7 @@ public enum ErrorCode {
     MENU_NOT_FOUND(404, "매뉴를 찾을 수 없습니다."),
     ORDER_NOT_FOUND(404, "주문을 찾을 수 없습니다."),
     REVIEW_NOT_FOUND(404, "리뷰를 찾을 수 없습니다."),
+    MISSING_UPDATE_FIELD(404,"Update failed. No valid fields were provided in the request."),
 
 
 
