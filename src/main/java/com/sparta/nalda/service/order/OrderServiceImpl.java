@@ -15,7 +15,6 @@ import com.sparta.nalda.repository.OrderRepository;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.OrderStatus;
 import jakarta.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
