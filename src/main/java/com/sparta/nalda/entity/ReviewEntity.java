@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
+@Getter
 @Entity
 @Table(name = "reviews")
 public class ReviewEntity extends BaseEntity {
