@@ -2,6 +2,8 @@ package com.sparta.nalda.service.review;
 
 import com.sparta.nalda.entity.OrderEntity;
 import com.sparta.nalda.entity.ReviewEntity;
+import com.sparta.nalda.entity.StoreEntity;
+import com.sparta.nalda.entity.UserEntity;
 import com.sparta.nalda.exception.ErrorCode;
 import com.sparta.nalda.exception.NdException;
 import com.sparta.nalda.repository.OrderRepository;
@@ -28,6 +30,10 @@ public class ReviewServiceImpl implements ReviewService {
         OrderEntity order = orderRepository.findById(orderId).orElseThrow(
                 () -> new NdException(ErrorCode.ORDER_NOT_FOUND));
 
+        UserEntity user = order.getUser();
+
+        StoreEntity store = order.getMenu().getStore();
+
         //주문 상태 확인
         if (!OrderStatus.DELIVERED.equals(order.getOrderStatus())) {
             throw new IllegalArgumentException("배달 완료 상태에서만 리뷰 작성이 가능합니다.");
@@ -38,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new IllegalArgumentException("하나의 주문에 하나의 리뷰만 작성이 가능합니다.");
         }
 
-        ReviewEntity review = new ReviewEntity(order, reviewContents, starScore);
+        ReviewEntity review = new ReviewEntity(order, reviewContents, starScore, store, user);
 
         reviewRepository.save(review);
     }
