@@ -5,6 +5,7 @@ import com.sparta.nalda.dto.order.OrderListResponseDto;
 import com.sparta.nalda.dto.order.OrderRequestDto;
 import com.sparta.nalda.dto.order.OrderResponseDto;
 import com.sparta.nalda.service.order.OrderService;
+import com.sparta.nalda.util.AuthUser;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ public class OrderController {
   @PostMapping
   public ResponseEntity<MessageResponse> createOrder(@RequestBody OrderRequestDto dto) {
 
-    orderService.createOrder(dto);
+    orderService.createOrder(AuthUser.getId(),dto);
 
     return ResponseEntity.ok(new MessageResponse("주문이 완료되었습니다."));
 

@@ -30,11 +30,11 @@ public class OrderServiceImpl implements OrderService {
 
   @Transactional
   @Override
-  public OrderEntity createOrder(OrderRequestDto requestDto) {
+  public OrderEntity createOrder(Long userId,OrderRequestDto requestDto) {
     // 사용자와 메뉴를 DB에서 조회
-    UserEntity user = userRepository.findById(requestDto.getUser())
+    UserEntity user = userRepository.findById(userId)
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
-    MenuEntity menu = menuRepository.findById(requestDto.getMenu())
+    MenuEntity menu = menuRepository.findById(requestDto.getMenuId())
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
 
     LocalTime now = LocalTime.now();

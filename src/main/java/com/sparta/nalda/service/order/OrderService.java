@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface OrderService {
 
-  OrderEntity createOrder(OrderRequestDto requestDto);
+  OrderEntity createOrder(Long userId ,OrderRequestDto requestDto);
 
   OrderResponseDto findById(Long id);
 
