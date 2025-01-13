@@ -8,11 +8,14 @@ import com.sparta.nalda.entity.MenuEntity;
 import com.sparta.nalda.entity.OrderEntity;
 import com.sparta.nalda.entity.StoreEntity;
 import com.sparta.nalda.entity.UserEntity;
+import com.sparta.nalda.exception.ErrorCode;
+import com.sparta.nalda.exception.NdException;
 import com.sparta.nalda.repository.MenuRepository;
 import com.sparta.nalda.repository.OrderRepository;
 import com.sparta.nalda.repository.UserRepository;
 import com.sparta.nalda.util.OrderStatus;
 import jakarta.transaction.Transactional;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,21 @@ public class OrderServiceImpl implements OrderService {
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
     MenuEntity menu = menuRepository.findById(requestDto.getMenu())
         .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴입니다."));
+
+    LocalTime now = LocalTime.now();
+
+    LocalTime closeTime = menu.getStore().getCloseTime();
+    LocalTime openTime = menu.getStore().getOpenTime();
+    Long minPrice = menu.getStore().getMinOrderPrice();
+
+    if ((closeTime.isBefore(openTime) && (now.isAfter(closeTime) && now.isBefore(openTime))) ||
+        (closeTime.isAfter(openTime) && (now.isAfter(closeTime) || now.isBefore(openTime)))) {
+      throw new NdException(ErrorCode.TIME_OVER);
+    }
+
+    if (menu.getPrice() < minPrice) {
+      throw new NdException(ErrorCode.MIN_ORDER_PRICE_NOT_OVER);
+    }
 
     // 주문 엔티티 생성
     OrderEntity order = new OrderEntity(OrderStatus.PENDING, user, menu);

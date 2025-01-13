@@ -22,7 +22,7 @@ public class OwnersOrderController {
 
   private final OrderService orderService;
 
-  @GetMapping()
+  @GetMapping("/orders")
   public ResponseEntity<List<OwnerOrderResponseDto>> findAllOwnerOrderResponseDto() {
 
     List<OwnerOrderResponseDto> orderListOwner = orderService.findAllOrderListOwner(AuthUser.getId());

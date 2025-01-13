@@ -20,6 +20,8 @@ public enum ErrorCode {
     INVALID_PASSWORD(400, "비밀번호가 일치하지 않습니다."),
     WITHDRAWN_USER(400, "사용할 수 없는 이메일입니다."),
     INVALID_EMPTY(400, "값이 비었습니다."),
+    TIME_OVER(400, "주문 가능한 시간이 아닙니다."),
+    MIN_ORDER_PRICE_NOT_OVER(400, "최소 주문 금액을 채워주세요."),
 
     /**
      * ******************************* 401 Error Code ***************************************
