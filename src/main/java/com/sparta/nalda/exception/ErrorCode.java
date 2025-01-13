@@ -29,7 +29,7 @@ public enum ErrorCode {
      */
 
     ROLE_MISMATCH(401, "This request is not suitable for the current role."),
-    ENABLE_STORE_LIMITED_EXCEEDED(401,"You cannot activate more than 3 stores at the same time."),
+    ENABLE_STORE_LIMITED_EXCEEDED(401,"가게는 3개까지만 생성할 수 있습니다."),
     STORE_OWNER_MISMATCH(401, "The action cannot be performed because you are not the owner of this store."),
 
     /**
