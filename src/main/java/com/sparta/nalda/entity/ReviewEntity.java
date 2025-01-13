@@ -32,10 +32,12 @@ public class ReviewEntity extends BaseEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    public ReviewEntity(OrderEntity order, String reviewContents, Integer starScore) {
+    public ReviewEntity(OrderEntity order, String reviewContents, Integer starScore, StoreEntity store, UserEntity user) {
         this.order = order;
         this.reviewContents = reviewContents;
         this.starScore = starScore;
+        this.store = store;
+        this.user = user;
     }
 
     public ReviewEntity() {
