@@ -39,4 +39,5 @@ public class MenuEntity extends BaseEntity {
     public MenuEntity() {
 
     }
+
 }

@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
 @Entity
-@Getter
 @Table(name = "reviews")
 public class ReviewEntity extends BaseEntity {
     @Id

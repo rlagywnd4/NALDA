@@ -11,6 +11,7 @@ public enum ErrorCode {
     BAD_REQUEST_ERROR(400, "Bad Request Exception"),
     NOT_FOUND_ERROR(404, "Not Found Exception"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error Exception"),
+    PERMISSION_DENIED_ERROR(401, "권한이 없습니다."),
 
     /**
      * ******************************* 400 Error Code ***************************************
