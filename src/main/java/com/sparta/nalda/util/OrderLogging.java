@@ -25,8 +25,8 @@ public class OrderLogging {
         if (args.length > 0 && args[0] instanceof OrderRequestDto) {
             OrderRequestDto dto = (OrderRequestDto) args[0];
             log.info("==============주문요청===============");
-            log.info("고객ID : {}", dto.getUser());
-            log.info("메뉴ID : {}", dto.getMenu());
+            log.info("고객ID : {}", AuthUser.getId());
+            log.info("메뉴ID : {}", dto.getMenuId());
             log.info("요청시각 : {}", requestTime);
             log.info("====================================");
 
